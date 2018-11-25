@@ -6,10 +6,10 @@ export async function putUser(email, sub) {
   const user = await Auth.currentAuthenticatedUser()
   const token = user.signInUserSession.idToken.jwtToken
   console.log(token)
-  return API.put(API_NAME, '/stg/api/v1/users', {
+  return API.post(API_NAME, '/stg/api/v1/users', {
     body: {
-      email,
-      sub
+      email: email,
+      sub: sub
     },
     headers: {
       Authorization: token
