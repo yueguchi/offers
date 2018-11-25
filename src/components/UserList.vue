@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     async test() {
-      const { message } = await api.getTest()
+      const { message } = await api.getUsers()
       this.message = message
     }
   }
