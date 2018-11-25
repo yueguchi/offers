@@ -1,10 +1,11 @@
 <template>
   <div class="page">
     <div class="login-form">
-      <p>ログイン</p>
-      <p>{{ status }}</p>
+      <p>{{ isLogin ? 'ログイン中' : 'ログインしてください' }}</p>
       <p>{{ message_text }} </p>
-      <ul class="login-form">
+      <ul
+        v-if="!isLogin"
+        class="login-form">
         <li>
           <label>ユーザー名</label>
           <input
@@ -19,13 +20,23 @@
         </li>
       </ul>
       <button
+        v-if="!isLogin"
         class="btn btn-primary"
         @click="signIn">ログイン</button>
       <button
+        v-if="isLogin"
         class="btn btn-primary"
         @click="signOut">ログアウト</button>
       <br>
-      <router-link :to="{ name: 'ApiGatewayTest'}">APIGateway連携テスト</router-link>
+      <div
+        v-if="isLogin">
+        <router-link :to="{ name: 'UserList'}">ユーザー一覧</router-link>
+      </div>
+      <br>
+      <div
+        v-if="!isLogin">
+        <router-link :to="{ name: 'Signup'}">新規登録</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +48,7 @@ Amplify.configure(awsExports)
 export default {
   data() {
     return {
-      status: '',
+      isLogin: false,
       userInfo: {
         username: '',
         password: ''
@@ -53,29 +64,31 @@ export default {
     checkLogin() {
       Auth.currentSession()
         .then(() => {
-          this.status = 'ログインしています'
+          this.isLogin = true
         })
         .catch(err => {
           console.error(err)
-          this.status = 'ログインしていません'
+          this.isLogin = false
         })
     },
     signIn() {
       Auth.signIn(this.userInfo.username, this.userInfo.password)
-        .then(data => {
+        .then(() => {
           this.message_text = 'ログインしました'
-          this.status = 'こんにちは、' + data.username + 'さん'
+          this.isLogin = true
         })
         .catch(err => {
           console.error(err)
           this.message_text = 'ログインできませんでした'
+          this.isLogin = false
         })
       this.checkLogin()
     },
-    signOut() {
-      Auth.signOut()
+    async signOut() {
+      await Auth.signOut()
         .then(() => {
           this.message_text = 'ログアウトしました'
+          this.isLogin = false
         })
         .catch(err => {
           console.error(err)
