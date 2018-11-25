@@ -53,7 +53,7 @@
 <script>
 import Amplify, { Auth } from 'aws-amplify'
 const awsExports = require('@/aws-exports').default
-// import * as api from '@/libs/api/api'
+import * as api from '@/libs/api/api'
 
 Amplify.configure(awsExports)
 export default {
@@ -81,15 +81,21 @@ export default {
       this.isConfirmStep = true
     },
     async confirm() {
-      await Auth.confirmSignUp(this.userInfo.email, this.userInfo.code)
-      // システムにも登録
-      if (!this.userInfo.sub) throw new Error('Sub is not found.')
-      // api.putUser({
-      //   email: this.userInfo.email,
-      //   sub: this.userInfo.sub
-      // })
-
-      this.$router.replace({ name: 'Signin' })
+      try {
+        await Auth.confirmSignUp(this.userInfo.email, this.userInfo.code)
+        // headerにAuthorizationをセットしたいので、ここでsignInさせとく
+        await Auth.signIn(this.userInfo.email, this.userInfo.password)
+        // システムにも登録
+        if (!this.userInfo.sub) throw new Error('Sub is not found.')
+        api.putUser({
+          email: this.userInfo.email,
+          sub: this.userInfo.sub
+        })
+        this.$router.replace({ name: 'Signin' })
+      } catch (err) {
+        console.error(err)
+        alert('システムエラー')
+      }
     }
   }
 }

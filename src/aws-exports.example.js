@@ -10,5 +10,13 @@ Amplify.configure({
     // ユーザープールのウェブクライアントID
     userPoolWebClientId: 'fugaaaa',
     mandatorySignIn: true
+  },
+  API: {
+    endpoints: [
+      {
+        name: 'cognito-tutorial-api',
+        endpoint: 'https://hogehoge'
+      }
+    ]
   }
 })
