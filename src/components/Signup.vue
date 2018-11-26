@@ -87,10 +87,7 @@ export default {
         await Auth.signIn(this.userInfo.email, this.userInfo.password)
         // システムにも登録
         if (!this.userInfo.sub) throw new Error('Sub is not found.')
-        api.putUser({
-          email: this.userInfo.email,
-          sub: this.userInfo.sub
-        })
+        api.putUser(this.userInfo.email, this.userInfo.sub)
         this.$router.replace({ name: 'Signin' })
       } catch (err) {
         console.error(err)

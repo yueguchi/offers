@@ -5,13 +5,14 @@ const API_NAME = 'cognito-tutorial-api'
 export async function putUser(email, sub) {
   const user = await Auth.currentAuthenticatedUser()
   const token = user.signInUserSession.idToken.jwtToken
-  console.log(token)
+  const params = {
+    email: email,
+    sub: sub
+  }
   return API.post(API_NAME, '/stg/api/v1/users', {
-    body: {
-      email: email,
-      sub: sub
-    },
+    body: params,
     headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: token
     }
   })
