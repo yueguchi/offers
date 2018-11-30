@@ -18,7 +18,7 @@ export async function putUser(email, sub) {
     body: params,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: getToken()
+      Authorization: await getToken()
     }
   })
 }
@@ -26,7 +26,7 @@ export async function putUser(email, sub) {
 export async function getUsers() {
   return API.get(API_NAME, '/stg/api/v1/users', {
     headers: {
-      Authorization: getToken()
+      Authorization: await getToken()
     }
   })
 }
