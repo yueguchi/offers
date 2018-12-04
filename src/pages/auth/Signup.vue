@@ -63,11 +63,12 @@ export default {
         await Auth.signIn(form.email, this.userInfo.password)
         // システムにも登録
         if (!form.sub) throw new Error('Sub is not found.')
-        api.putUser(form.email, form.sub)
+        await api.putUser(form.email, form.sub)
         this.$router.replace({ name: 'Signin' })
       } catch (err) {
         console.error(err)
         alert('システムエラー')
+        // TODO システム登録に失敗したら、Cognitoからも削除する(API側で行う???)
       }
     }
   }
