@@ -22,8 +22,9 @@ export default {
   },
   methods: {
     async test() {
-      const { message } = await api.getUsers()
-      this.message = message
+      const users = await api.getUsers()
+      console.log(users)
+      this.message = users
     }
   }
 }
