@@ -23,8 +23,8 @@ export async function putUser(email, sub) {
   })
 }
 
-export async function getUsers() {
-  return API.get(API_NAME, '/stg/offers/api/v1/users', {
+export async function getUsers(conditions) {
+  return API.get(API_NAME, `/stg/offers/api/v1/users?page=${conditions.page}&limit=${conditions.limit}`, {
     headers: {
       Authorization: await getToken()
     }

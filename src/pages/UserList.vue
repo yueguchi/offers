@@ -1,7 +1,14 @@
 <template>
   <div class="apigateway-test">
     <div class="contents">
-      <p class="message">{{ message }}</p>
+      <h2 class="users">ユーザー一覧</h2>
+      <ul>
+        <li
+          v-for="(user, index) in response.users"
+          :key="index">
+          {{ user.email }}
+        </li>
+      </ul>
     </div>
     <router-link
       :to="{ name: 'Signin'}"
@@ -13,18 +20,27 @@ import * as api from '@/libs/api/api'
 export default {
   data() {
     return {
-      message: 'empty'
+      response: {
+        users: 'empty',
+        total: 0,
+        count: 0
+      },
+      form: {
+        page: 1,
+        limit: 20
+      }
     }
   },
   created() {},
   mounted() {
-    this.test()
+    this.getUsers()
   },
   methods: {
-    async test() {
-      const users = await api.getUsers()
-      console.log(users)
-      this.message = users
+    async getUsers() {
+      const { results, count, total } = await api.getUsers(this.form)
+      this.response.users = results
+      this.response.count = count
+      this.response.total = total
     }
   }
 }
