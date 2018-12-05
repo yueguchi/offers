@@ -1,44 +1,90 @@
 <template>
-  <div class="page">
-    <div class="login-form">
-      <p>{{ isLogin ? 'ログイン中' : 'ログインしてください' }}</p>
-      <p>{{ message_text }} </p>
-      <ul
+  <v-layout
+    align-center
+    justify-center>
+    <v-flex
+      xs12
+      sm8
+      md4>
+      <v-card
         v-if="!isLogin"
-        class="login-form">
-        <li>
-          <label>ユーザー名</label>
-          <input
-            v-model="userInfo.username"
-            type="text">
-        </li>
-        <li>
-          <label>パスワード</label>
-          <input
-            v-model="userInfo.password"
-            type="password">
-        </li>
-      </ul>
-      <button
-        v-if="!isLogin"
-        class="btn btn-primary"
-        @click="signIn">ログイン</button>
-      <button
-        v-if="isLogin"
-        class="btn btn-primary"
-        @click="signOut">ログアウト</button>
-      <br>
-      <div
-        v-if="isLogin">
-        <router-link :to="{ name: 'UserList'}">ユーザー一覧</router-link>
-      </div>
+        class="elevation-12">
+        <v-toolbar
+          dark
+          color="primary">
+          <v-toolbar-title>Login form</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              v-model="userInfo.username"
+              prepend-icon="person"
+              name="login"
+              label="Login"
+              type="text" />
+            <v-text-field
+              v-model="userInfo.password"
+              prepend-icon="lock"
+              name="password"
+              label="Password"
+              type="password" />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="primary"
+            @click="signIn">SignIn</v-btn>
+        </v-card-actions>
+      </v-card>
+
+      <v-card v-if="isLogin">
+        <v-container
+          fluid
+          grid-list-lg>
+          <v-toolbar
+            dark
+            color="accent">
+            <v-toolbar-title>Menu</v-toolbar-title>
+          </v-toolbar>
+          <v-layout
+            row
+            wrap>
+            <v-flex xs12>
+              <v-card
+                color="blue-grey darken-2"
+                class="white--text">
+                <v-card-title primary-title>
+                  <div @click="moveUserListPage">
+                    <div class="headline"> >> Search Users</div>
+                    <span><small>Move User List Page</small></span>
+                  </div>
+                </v-card-title>
+              </v-card>
+            </v-flex>
+            <v-flex xs12>
+              <v-card
+                color="blue-grey lighten-5"
+                class="white--text">
+                <v-card-actions>
+                  <v-btn
+                    color="secondary"
+                    @click="signOut">
+                    SignOut
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
       <br>
       <div
         v-if="!isLogin">
-        <router-link :to="{ name: 'Signup'}">新規登録</router-link>
+        <router-link :to="{ name: 'Signup'}">SignUp</router-link>
       </div>
-    </div>
-  </div>
+    </v-flex>
+  </v-layout>
 </template>
 <script>
 import Amplify, { Auth } from 'aws-amplify'
@@ -71,6 +117,9 @@ export default {
           this.isLogin = false
         })
     },
+    moveUserListPage() {
+      this.$router.push({ name: 'UserList' })
+    },
     signIn() {
       Auth.signIn(this.userInfo.username, this.userInfo.password)
         .then(() => {
@@ -100,7 +149,4 @@ export default {
 }
 </script>
 <style scoped>
-.login-form {
-  list-style: none;
-}
 </style>

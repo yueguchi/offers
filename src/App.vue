@@ -1,7 +1,15 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <v-app>
+      <v-navigation-drawer app />
+      <v-toolbar app>title</v-toolbar>
+      <v-content>
+        <v-container fluid>
+          <router-view />
+        </v-container>
+      </v-content>
+      <v-footer app />
+    </v-app>
   </div>
 </template>
 
@@ -11,5 +19,5 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 </style>
